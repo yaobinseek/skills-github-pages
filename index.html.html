@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>数智赋能：双人合作跳短绳｜学生端</title>
+  <style>
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{width:100%;height:100%;margin:0;overflow:hidden;font-family:"Microsoft YaHei","PingFang SC",Arial,sans-serif;background:#eaf6ff;color:#123}
+    .bg{position:fixed;inset:0;z-index:0;background:linear-gradient(135deg,rgba(226,246,255,.94),rgba(255,248,226,.9)),radial-gradient(circle at 20% 20%,rgba(56,189,248,.22),transparent 28%),radial-gradient(circle at 82% 18%,rgba(251,191,36,.2),transparent 26%),radial-gradient(circle at 55% 86%,rgba(34,197,94,.16),transparent 30%)}
+    .app{position:relative;z-index:2;width:100vw;height:100vh;padding:2.2vh 2.6vw;display:flex;flex-direction:column;gap:1.6vh}
+    .title{text-align:center;font-size:clamp(28px,4.2vw,54px);font-weight:1000;letter-spacing:.08em;color:#075985;line-height:1.05;text-shadow:0 3px 0 rgba(255,255,255,.9)}
+    .subtitle{text-align:center;margin-top:-.6vh;font-size:clamp(14px,1.45vw,20px);color:#0f766e;font-weight:800}
+    .api-note{text-align:center;font-size:clamp(11px,.95vw,14px);color:#64748b;font-weight:700;margin-top:-.5vh}
+    .main{flex:1;min-height:0;display:grid;grid-template-columns:30% 1fr;gap:2vw;align-items:stretch}
+    .panel{background:rgba(255,255,255,.8);border:2px solid rgba(14,116,144,.14);border-radius:28px;box-shadow:0 18px 40px rgba(7,89,133,.12);backdrop-filter:blur(10px)}
+    .left-panel{padding:2.2vh 1.6vw;display:flex;flex-direction:column;justify-content:space-between;gap:1.6vh}
+    .label{font-size:clamp(18px,2.2vw,30px);font-weight:1000;color:#0f172a;text-align:center}
+    select{width:100%;height:clamp(68px,10vh,100px);border-radius:24px;border:3px solid #0284c7;background:#fff;color:#075985;font-size:clamp(28px,4vw,52px);font-weight:1000;text-align:center;text-align-last:center;outline:none;box-shadow:0 10px 22px rgba(2,132,199,.16)}
+    .group-card{flex:1;min-height:0;border-radius:24px;background:linear-gradient(180deg,rgba(14,165,233,.14),rgba(34,197,94,.12));display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:1.8vh 1vw;border:2px dashed rgba(14,116,144,.25)}
+    .current-group{font-size:clamp(58px,8vw,108px);line-height:1;font-weight:1000;color:#0369a1}.group-text{margin-top:.8vh;font-size:clamp(18px,2vw,26px);color:#334155;font-weight:900}.tip{font-size:clamp(13px,1.25vw,18px);color:#475569;line-height:1.45;text-align:center;font-weight:800}
+    .right-panel{padding:2.2vh 2vw;display:flex;flex-direction:column;gap:1.3vh;min-width:0}.button-title{display:flex;align-items:center;justify-content:space-between;gap:1vw;min-height:4vh}.button-title strong{font-size:clamp(18px,2vw,28px);color:#0f172a}.status{min-width:260px;text-align:right;font-size:clamp(14px,1.35vw,18px);color:#64748b;font-weight:900;white-space:nowrap}
+    .grid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(4,minmax(0,1fr));gap:1.35vh 1.35vw}
+    .pass-btn{width:100%;height:100%;border:none;border-radius:26px;cursor:pointer;color:white;font-size:clamp(23px,2.9vw,40px);font-weight:1000;letter-spacing:.04em;box-shadow:0 12px 0 rgba(15,23,42,.13),0 20px 30px rgba(15,23,42,.12);transition:transform .08s ease,box-shadow .08s ease,filter .08s ease;display:flex;align-items:center;justify-content:center;text-align:center;padding:.5vh 1vw;line-height:1.08;user-select:none}
+    .pass-btn:active{transform:translateY(5px) scale(.99);box-shadow:0 5px 0 rgba(15,23,42,.14),0 10px 18px rgba(15,23,42,.14);filter:brightness(.97)}.pass-btn:disabled{cursor:not-allowed;opacity:.68;filter:grayscale(.25)}
+    .b1{background:linear-gradient(135deg,#0284c7,#38bdf8)}.b2{background:linear-gradient(135deg,#16a34a,#4ade80)}.b3{background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#422006}.b4{background:linear-gradient(135deg,#ef4444,#fb7185)}.b6{background:linear-gradient(135deg,#0f766e,#2dd4bf)}.b7{background:linear-gradient(135deg,#db2777,#f472b6)}.help-btn-main{background:linear-gradient(135deg,#0f172a,#475569);font-size:clamp(20px,2.45vw,34px)}.empty-slot{border-radius:26px;border:3px dashed rgba(15,23,42,.12);background:rgba(255,255,255,.38);display:flex;align-items:center;justify-content:center;color:rgba(15,23,42,.24);font-size:clamp(18px,2.2vw,28px);font-weight:900}
+    .toast{position:fixed;left:50%;bottom:3vh;transform:translateX(-50%) translateY(120px);z-index:30;min-width:min(620px,86vw);max-width:92vw;padding:18px 28px;border-radius:999px;text-align:center;font-size:clamp(18px,2vw,28px);font-weight:1000;color:#fff;background:rgba(15,23,42,.92);box-shadow:0 18px 38px rgba(15,23,42,.25);transition:transform .22s ease;pointer-events:none}.toast.show{transform:translateX(-50%) translateY(0)}.toast.success{background:rgba(22,163,74,.94)}.toast.error{background:rgba(220,38,38,.94)}.toast.warn{background:rgba(217,119,6,.94)}
+    .modal-mask{position:fixed;inset:0;z-index:20;display:none;align-items:center;justify-content:center;padding:2vh 2vw;background:rgba(15,23,42,.46);backdrop-filter:blur(4px)}.modal-mask.show{display:flex}.modal{width:min(980px,92vw);max-height:86vh;overflow:hidden;border-radius:30px;background:rgba(255,255,255,.98);box-shadow:0 24px 55px rgba(15,23,42,.25);border:2px solid rgba(14,116,144,.15);display:flex;flex-direction:column}.modal-head{padding:1.6vh 1.7vw;background:linear-gradient(135deg,#e0f2fe,#f0fdf4);display:flex;align-items:center;justify-content:space-between;gap:1vw;border-bottom:1px solid rgba(15,23,42,.08)}.modal-title{font-size:clamp(24px,2.7vw,40px);font-weight:1000;color:#075985;line-height:1.15}.modal-subtitle{margin-top:.45vh;font-size:clamp(13px,1.2vw,18px);color:#475569;font-weight:800}.close-btn{width:clamp(44px,4vw,58px);height:clamp(44px,4vw,58px);border:none;border-radius:50%;background:#fff;color:#334155;font-size:clamp(26px,2.6vw,36px);font-weight:900;box-shadow:0 8px 18px rgba(15,23,42,.12);cursor:pointer;flex:0 0 auto}.modal-body{padding:1.8vh 1.7vw 2vh;display:grid;grid-template-columns:32% 1fr;gap:1.4vw;min-height:0}.helper-select-area{display:flex;flex-direction:column;gap:1.2vh}.help-label{font-size:clamp(17px,1.65vw,24px);font-weight:1000;color:#0f172a;text-align:center}.help-note{background:#f8fafc;border:2px dashed rgba(14,116,144,.18);border-radius:22px;padding:1.2vh 1vw;font-size:clamp(13px,1.05vw,16px);color:#475569;font-weight:800;line-height:1.45;text-align:center}.help-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(64px,1fr));gap:1.1vh 1.1vw}.help-level-btn{border:none;border-radius:22px;color:#fff;font-size:clamp(22px,2.2vw,32px);font-weight:1000;box-shadow:0 9px 0 rgba(15,23,42,.13),0 16px 24px rgba(15,23,42,.12);cursor:pointer;padding:.5vh .8vw;line-height:1.08}.help-level-btn:active{transform:translateY(4px);box-shadow:0 4px 0 rgba(15,23,42,.13),0 9px 16px rgba(15,23,42,.12)}.h1{background:linear-gradient(135deg,#0284c7,#38bdf8)}.h2{background:linear-gradient(135deg,#16a34a,#4ade80)}.h3{background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#422006}.h4{background:linear-gradient(135deg,#ef4444,#fb7185)}
+    @media(max-width:760px){.app{padding:1.6vh 2vw;gap:1vh}.main{grid-template-columns:32% 1fr;gap:1.5vw}.left-panel,.right-panel{border-radius:20px;padding:1.5vh 1.4vw}.grid{gap:1vh 1vw}.pass-btn{border-radius:18px;font-size:clamp(18px,4vw,30px)}.empty-slot{border-radius:18px}.status{min-width:140px}.modal-body{grid-template-columns:1fr}.help-grid{grid-template-columns:repeat(2,1fr)}}
+  </style>
+</head>
+<body>
+  <div class="bg"></div>
+  <main class="app">
+    <header>
+      <div class="title">数智赋能：双人合作跳短绳</div>
+      <div class="subtitle">选择小组 → 完成动作后点击通关；数据将直接POST到QuickForm</div>
+      <div class="api-note">接口：https://quickform.cn/api/j6x26yvote</div>
+    </header>
+    <section class="main">
+      <aside class="panel left-panel">
+        <div class="label">请选择小组</div>
+        <select id="groupSelect" aria-label="选择小组"></select>
+        <div class="group-card">
+          <div class="current-group" id="currentGroup">1</div>
+          <div class="group-text">第 <span id="currentGroupText">1</span> 小组</div>
+        </div>
+        <div class="tip">提醒：完成动作后再点击。若帮助同伴，请先选择自己的小组，再选择帮助完成的关卡。</div>
+      </aside>
+      <section class="panel right-panel">
+        <div class="button-title">
+          <strong>通关记录区</strong>
+          <div class="status" id="statusText">等待提交</div>
+        </div>
+        <div class="grid" id="buttonGrid">
+          <button class="pass-btn b1" data-level="第一关通过">第一关通过</button>
+          <button class="pass-btn b2" data-level="第二关通过">第二关通过</button>
+          <button class="pass-btn b3" data-level="第三关通过">第三关通过</button>
+          <button class="pass-btn b4" data-level="第四关通过">第四关通过</button>
+          <button class="pass-btn b6" data-level="创编动作1通过">创编动作1通过</button>
+          <button class="pass-btn b7" data-level="创编动作2通过">创编动作2通过</button>
+          <button class="pass-btn help-btn-main" id="openHelpModal">帮助同伴完成</button>
+          <div class="empty-slot">小教练</div>
+        </div>
+      </section>
+    </section>
+  </main>
+  <section class="modal-mask" id="helpModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-head">
+        <div>
+          <div class="modal-title" id="modalTitle">帮助同伴完成</div>
+          <div class="modal-subtitle">选择你帮助同伴完成的关卡，系统会自动记录你的小组和帮助项目</div>
+        </div>
+        <button class="close-btn" id="closeHelpModal" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="helper-select-area">
+          <div class="help-label">帮助小组</div>
+          <select id="helperGroupSelect" aria-label="选择帮助同伴的小组"></select>
+          <div class="help-note">建议仅在完成创编后使用。<br>如果你教会了还没过关的同伴，请选择对应关卡提交。</div>
+        </div>
+        <div class="help-grid">
+          <button class="help-level-btn h1" data-help-level="帮助同伴完成第一关">帮助完成<br>第一关</button>
+          <button class="help-level-btn h2" data-help-level="帮助同伴完成第二关">帮助完成<br>第二关</button>
+          <button class="help-level-btn h3" data-help-level="帮助同伴完成第三关">帮助完成<br>第三关</button>
+          <button class="help-level-btn h4" data-help-level="帮助同伴完成第四关">帮助完成<br>第四关</button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="toast" id="toast">提交成功</div>
+  <!-- 固定真实表单：点击按钮后只填充这些 input，再由浏览器原生 form POST 到 QuickForm -->
+  <iframe id="submitFrame" name="quickformSink" style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;border:0;opacity:0" title="QuickForm提交回执"></iframe>
+  <form id="quickformSubmitForm" action="https://quickform.cn/api/j6x26yvote" method="POST" enctype="application/x-www-form-urlencoded" accept-charset="UTF-8" target="quickformSink" style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;opacity:0" aria-hidden="true">
+    <input type="hidden" name="课程名称" id="f_course" />
+    <input type="hidden" name="小组" id="f_group_cn" />
+    <input type="hidden" name="小组编号" id="f_group_no" />
+    <input type="hidden" name="通关项目" id="f_item" />
+    <input type="hidden" name="结果" id="f_result" />
+    <input type="hidden" name="记录类型" id="f_type" />
+    <input type="hidden" name="帮助内容" id="f_help_content" />
+    <input type="hidden" name="提交时间" id="f_time" />
+    <input type="hidden" name="设备来源" id="f_device" />
+    <input type="hidden" name="记录ID" id="f_record_id" />
+    <input type="hidden" name="页面版本" id="f_version" />
+    <input type="hidden" name="groupNumber" id="f_groupNumber" />
+    <input type="hidden" name="group" id="f_group" />
+    <input type="hidden" name="level" id="f_level" />
+    <input type="hidden" name="stage" id="f_stage" />
+    <input type="hidden" name="title" id="f_title" />
+    <input type="hidden" name="data" id="f_data" />
+    <input type="hidden" name="payload_json" id="f_payload_json" />
+    <button type="submit" id="realSubmitButton" tabindex="-1">submit</button>
+  </form>
+  <script>
+    const API_URL = "https://quickform.cn/api/j6x26yvote";
+    const COURSE_NAME = "数智赋能：双人合作跳短绳";
+    const CLIENT_VERSION = "student_real_form_post_j6x26yvote_20260523_fixed";
+
+    const groupSelect = document.getElementById("groupSelect");
+    const currentGroup = document.getElementById("currentGroup");
+    const currentGroupText = document.getElementById("currentGroupText");
+    const statusText = document.getElementById("statusText");
+    const toast = document.getElementById("toast");
+    const buttons = Array.from(document.querySelectorAll(".pass-btn[data-level]"));
+    const helpButtons = Array.from(document.querySelectorAll(".help-level-btn"));
+    const helperGroupSelect = document.getElementById("helperGroupSelect");
+    const helpModal = document.getElementById("helpModal");
+    const openHelpModal = document.getElementById("openHelpModal");
+    const closeHelpModal = document.getElementById("closeHelpModal");
+    const submitFrame = document.getElementById("submitFrame");
+    const submitForm = document.getElementById("quickformSubmitForm");
+    const realSubmitButton = document.getElementById("realSubmitButton");
+
+    let isSubmitting = false;
+    let toastTimer = null;
+    let lastSubmittedRecordId = "";
+
+    const fieldIds = {
+      "课程名称": "f_course",
+      "小组": "f_group_cn",
+      "小组编号": "f_group_no",
+      "通关项目": "f_item",
+      "结果": "f_result",
+      "记录类型": "f_type",
+      "帮助内容": "f_help_content",
+      "提交时间": "f_time",
+      "设备来源": "f_device",
+      "记录ID": "f_record_id",
+      "页面版本": "f_version",
+      "groupNumber": "f_groupNumber",
+      "group": "f_group",
+      "level": "f_level",
+      "stage": "f_stage",
+      "title": "f_title",
+      "data": "f_data",
+      "payload_json": "f_payload_json"
+    };
+
+    function pad(n){ return String(n).padStart(2, "0"); }
+    function getTimeText(){
+      const now = new Date();
+      return `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+    }
+    function makeRecordId(groupNumber, item){
+      return `${Date.now()}_${groupNumber}_${item}_${Math.random().toString(16).slice(2,8)}`;
+    }
+    function initGroups(){
+      for(let i=1;i<=24;i++){
+        const option=document.createElement("option");
+        option.value=String(i);
+        option.textContent=`第 ${i} 小组`;
+        groupSelect.appendChild(option);
+        const helperOption=document.createElement("option");
+        helperOption.value=String(i);
+        helperOption.textContent=`第 ${i} 小组`;
+        helperGroupSelect.appendChild(helperOption);
+      }
+      updateGroupDisplay();
+      helperGroupSelect.value = groupSelect.value;
+    }
+    function updateGroupDisplay(){
+      const value = groupSelect.value || "1";
+      currentGroup.textContent = value;
+      currentGroupText.textContent = value;
+      if(helperGroupSelect) helperGroupSelect.value = value;
+    }
+    function showToast(message,type="success"){
+      clearTimeout(toastTimer);
+      toast.textContent=message;
+      toast.className=`toast show ${type}`;
+      toastTimer=setTimeout(()=>{ toast.className="toast"; },1800);
+    }
+    function setSubmittingState(submitting){
+      isSubmitting=submitting;
+      buttons.forEach(btn=>btn.disabled=submitting);
+      helpButtons.forEach(btn=>btn.disabled=submitting);
+      openHelpModal.disabled=submitting;
+      statusText.textContent = submitting ? "正在提交到QuickForm……" : "等待提交";
+    }
+    function levelIdFromName(name){
+      if(name.includes("第一关")) return 1;
+      if(name.includes("第二关")) return 2;
+      if(name.includes("第三关")) return 3;
+      if(name.includes("第四关")) return 4;
+      if(name.includes("第五关")) return 5;
+      if(name.includes("创编动作1")) return 5;
+      if(name.includes("创编动作2")) return 6;
+      return 0;
+    }
+    function buildPassPayload(levelName){
+      const groupNumber = groupSelect.value || "1";
+      const now = getTimeText();
+      const levelId = levelIdFromName(levelName);
+      const recordId = makeRecordId(groupNumber, levelName);
+      return {
+        "课程名称": COURSE_NAME,
+        "小组": `第${groupNumber}小组`,
+        "小组编号": String(groupNumber),
+        "通关项目": levelName,
+        "结果": "通过",
+        "记录类型": "闯关通关",
+        "帮助内容": "",
+        "提交时间": now,
+        "设备来源": "学生端iPad",
+        "记录ID": recordId,
+        "页面版本": CLIENT_VERSION,
+        "groupNumber": String(groupNumber),
+        "group": `第${groupNumber}小组`,
+        "level": levelName,
+        "stage": String(levelId),
+        "title": levelName
+      };
+    }
+    function buildHelpPayload(helpLevelName){
+      const helperGroupNumber = helperGroupSelect.value || groupSelect.value || "1";
+      const now = getTimeText();
+      const levelId = levelIdFromName(helpLevelName);
+      const recordId = makeRecordId(helperGroupNumber, helpLevelName);
+      return {
+        "课程名称": COURSE_NAME,
+        "小组": `第${helperGroupNumber}小组`,
+        "小组编号": String(helperGroupNumber),
+        "通关项目": helpLevelName,
+        "结果": "帮助完成",
+        "记录类型": "帮助同伴",
+        "帮助内容": helpLevelName,
+        "提交时间": now,
+        "设备来源": "学生端iPad",
+        "记录ID": recordId,
+        "页面版本": CLIENT_VERSION,
+        "groupNumber": String(helperGroupNumber),
+        "group": `第${helperGroupNumber}小组`,
+        "level": helpLevelName,
+        "stage": String(levelId),
+        "title": helpLevelName
+      };
+    }
+
+    // 关键：固定真实 form + application/x-www-form-urlencoded 表单提交。
+    // 点击按钮后填充 hidden input，再由浏览器原生 POST 到 QuickForm，避免 fetch 跨域/CORS 导致后台收不到。
+    function fillRealForm(payload){
+      const json = JSON.stringify(payload);
+      const fullPayload = {
+        ...payload,
+        "data": json,
+        "payload_json": json
+      };
+      Object.entries(fieldIds).forEach(([key, id])=>{
+        const input = document.getElementById(id);
+        if(input) input.value = fullPayload[key] == null ? "" : String(fullPayload[key]);
+      });
+      lastSubmittedRecordId = payload["记录ID"] || "";
+    }
+
+    function postByRealForm(payload){
+      fillRealForm(payload);
+      submitForm.action = API_URL;
+      submitForm.method = "POST";
+      submitForm.enctype = "application/x-www-form-urlencoded";
+      submitForm.encoding = "application/x-www-form-urlencoded";
+      submitForm.acceptCharset = "UTF-8";
+      submitForm.target = "quickformSink";
+
+      // 用真实 submit button 触发表单提交，兼容 iPad / Chrome / Edge。
+      if (realSubmitButton && typeof realSubmitButton.click === "function") {
+        realSubmitButton.click();
+      } else if (typeof submitForm.requestSubmit === "function") {
+        submitForm.requestSubmit();
+      } else {
+        submitForm.submit();
+      }
+      return true;
+    }
+
+    function submitPayload(payload, successMessage){
+      if(isSubmitting) return;
+      setSubmittingState(true);
+      try{
+        postByRealForm(payload);
+        statusText.textContent = successMessage;
+        showToast(successMessage,"success");
+      }catch(err){
+        console.error(err);
+        statusText.textContent = "提交失败，请再点一次";
+        showToast("提交失败，请检查网络后重试","error");
+      }finally{
+        setTimeout(()=>setSubmittingState(false),1200);
+      }
+    }
+    function submitRecord(levelName){
+      const groupNumber = groupSelect.value;
+      if(!groupNumber){
+        showToast("请先选择小组","warn");
+        return;
+      }
+      submitPayload(buildPassPayload(levelName), `第${groupNumber}小组 ${levelName} 已提交到QuickForm`);
+    }
+    function submitHelpRecord(helpLevelName){
+      const helperGroupNumber = helperGroupSelect.value;
+      if(!helperGroupNumber){
+        showToast("请先选择帮助小组","warn");
+        return;
+      }
+      submitPayload(buildHelpPayload(helpLevelName), `第${helperGroupNumber}小组 ${helpLevelName} 已提交到QuickForm`);
+      setTimeout(closeHelp,500);
+    }
+    function openHelp(){
+      helperGroupSelect.value = groupSelect.value || "1";
+      helpModal.classList.add("show");
+      helpModal.setAttribute("aria-hidden","false");
+    }
+    function closeHelp(){
+      helpModal.classList.remove("show");
+      helpModal.setAttribute("aria-hidden","true");
+    }
+
+    // iframe 加载只能说明服务器有响应；跨域页面内容无法读取，这是正常现象。
+    submitFrame.addEventListener("load", ()=>{
+      if(lastSubmittedRecordId){
+        console.log("QuickForm form POST sent:", lastSubmittedRecordId);
+      }
+    });
+
+    groupSelect.addEventListener("change", updateGroupDisplay);
+    buttons.forEach(button=>button.addEventListener("click",()=>submitRecord(button.dataset.level)));
+    helpButtons.forEach(button=>button.addEventListener("click",()=>submitHelpRecord(button.dataset.helpLevel)));
+    openHelpModal.addEventListener("click", openHelp);
+    closeHelpModal.addEventListener("click", closeHelp);
+    helpModal.addEventListener("click", event=>{ if(event.target===helpModal) closeHelp(); });
+    document.addEventListener("keydown", event=>{ if(event.key==="Escape") closeHelp(); });
+    initGroups();
+  </script>
+
+</body>
+</html>
